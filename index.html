@@ -70,20 +70,22 @@ function start(location) {
 function onHasParentDirectory() {
   var box = document.getElementById("parentDirLinkBox");
 
-  // Check if we are at the home/root page
+  // URLs considered "home page"
   var rootUrl = "https://mayankhassija.github.io/SimplePortfolio/";
-  if (document.location.href === rootUrl) {
-    // Home page → hide parent directory
+  var homeUrls = [rootUrl, rootUrl + "index.html"];
+
+  // Hide parent directory on home page
+  if (homeUrls.includes(document.location.href)) {
     box.style.display = "none";
     return;
   }
 
-  // Otherwise, show parent directory
+  // Show parent directory otherwise
   box.style.display = "block";
-
   var link = document.getElementById("parentDirLink");
-  link.href = rootUrl; // Link back to home page
+  link.href = rootUrl; // link back to home
 }
+
 
 
 function sortTable(column) {
