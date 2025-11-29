@@ -40,8 +40,6 @@ function addRow(name, url, isdir,
   file_cell.appendChild(link);
 
   row.appendChild(file_cell);
-  row.appendChild(createCell(size, size_string));
-  row.appendChild(createCell(date_modified, date_modified_string));
 
   tbody.appendChild(row);
 }
@@ -71,15 +69,22 @@ function start(location) {
 
 function onHasParentDirectory() {
   var box = document.getElementById("parentDirLinkBox");
+
+  // Check if we are at the home/root page
+  var rootUrl = "https://mayankhassija.github.io/SimplePortfolio/";
+  if (document.location.href === rootUrl) {
+    // Home page → hide parent directory
+    box.style.display = "none";
+    return;
+  }
+
+  // Otherwise, show parent directory
   box.style.display = "block";
 
-  var root = document.location.pathname;
-  if (!root.endsWith("/"))
-    root += "/";
-
   var link = document.getElementById("parentDirLink");
-  link.href = root + "..";
+  link.href = rootUrl; // Link back to home page
 }
+
 
 function sortTable(column) {
   var theader = document.getElementById("theader");
@@ -131,8 +136,6 @@ function addHandlers(element, column) {
 
 function onLoad() {
   addHandlers(document.getElementById('nameColumnHeader'), 0);
-  addHandlers(document.getElementById('sizeColumnHeader'), 1);
-  addHandlers(document.getElementById('dateColumnHeader'), 2);
 }
 
 window.addEventListener('DOMContentLoaded', onLoad);
@@ -211,12 +214,6 @@ window.addEventListener('DOMContentLoaded', onLoad);
   <thead>
     <tr class="header" id="theader">
       <th id="nameColumnHeader" tabindex=0 role="button">Name</th>
-      <th id="sizeColumnHeader" class="detailsColumn" tabindex=0 role="button">
-        Size
-      </th>
-      <th id="dateColumnHeader" class="detailsColumn" tabindex=0 role="button">
-        Date modified
-      </th>
     </tr>
   </thead>
   <tbody id="tbody">
@@ -226,13 +223,17 @@ window.addEventListener('DOMContentLoaded', onLoad);
 </body>
 
 </html>
-<script>// Copyright 2012 The Chromium Authors
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-"use strict";var loadTimeData;class LoadTimeData{constructor(){this.data_=null}set data(value){expect(!this.data_,"Re-setting data.");this.data_=value}valueExists(id){return id in this.data_}getValue(id){expect(this.data_,"No data. Did you remember to include strings.js?");const value=this.data_[id];expect(typeof value!=="undefined","Could not find value for "+id);return value}getString(id){const value=this.getValue(id);expectIsType(id,value,"string");return value}getStringF(id,var_args){const value=this.getString(id);if(!value){return""}const args=Array.prototype.slice.call(arguments);args[0]=value;return this.substituteString.apply(this,args)}substituteString(label,var_args){const varArgs=arguments;return label.replace(/\$(.|$|\n)/g,(function(m){expect(m.match(/\$[$1-9]/),"Unescaped $ found in localized string.");return m==="$$"?"$":varArgs[m[1]]}))}getBoolean(id){const value=this.getValue(id);expectIsType(id,value,"boolean");return value}getInteger(id){const value=this.getValue(id);expectIsType(id,value,"number");expect(value===Math.floor(value),"Number isn't integer: "+value);return value}overrideValues(replacements){expect(typeof replacements==="object","Replacements must be a dictionary object.");for(const key in replacements){this.data_[key]=replacements[key]}}}function expect(condition,message){if(!condition){throw new Error("Unexpected condition on "+document.location.href+": "+message)}}function expectIsType(id,value,type){expect(typeof value===type,"["+value+"] ("+id+") is not a "+type)}expect(!loadTimeData,"should only include this file once");loadTimeData=new LoadTimeData;window.loadTimeData=loadTimeData;console.warn("crbug/1173575, non-JS module files deprecated.");</script><script>loadTimeData.data = {"header":"Index of LOCATION","headerDateModified":"Date modified","headerName":"Name","headerSize":"Size","language":"en","parentDirText":"[parent directory]","textdirection":"ltr"};</script><script>start("C:\\Users\\User\\Desktop\\Portfolio\\");</script>
-<script>onHasParentDirectory();</script>
-<script>addRow("Portfolio - Copy","Portfolio%20-%20Copy",1,0,"0 B",1764394062,"29/11/2025, 10:57:42");</script>
-<script>addRow("Projects","Projects",1,0,"0 B",1764393324,"29/11/2025, 10:45:24");</script>
-<script>addRow("About Me.txt","About%20Me.txt",0,18,"18 B",1764393133,"29/11/2025, 10:42:13");</script>
-<script>addRow("index.html","index.html",0,3421,"3.3 kB",1764394006,"29/11/2025, 10:56:46");</script>
-<script>addRow("profile.png","profile.png",0,549144,"536 kB",1764196170,"27/11/2025, 03:59:30");</script>
+<script>
+  // Set up header text
+  start("https://mayankhassija.github.io/SimplePortfolio/");
+
+  // Show parent directory link
+  onHasParentDirectory();
+
+  // Add files/folders (no size or date)
+  addRow("Portfolio - Copy", "Portfolio%20-%20Copy", 1);
+  addRow("Projects", "Projects", 1);
+  addRow("About Me.txt", "About%20Me.txt", 0);
+  addRow("index.html", "index.html", 0);
+  addRow("profile.png", "profile.png", 0);
+</script>
