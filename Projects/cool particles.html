@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KidWorld Universe</title>
+<style>
+  /* RESET */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #111;
+    overflow-x: hidden;
+    font-family: 'Comic Sans MS', sans-serif;
+    color: #fff;
+  }
+
+  /* --- BACKGROUND LAYERS (Combo of shapes + particles) --- */
+  #galaxy-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    background: radial-gradient(circle at 50% 50%, #222, #000);
+  }
+  #floating-shapes svg {
+    position: absolute;
+    animation: float 12s infinite ease-in-out;
+    opacity: 0.4;
+  }
+  @keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-40px) rotate(10deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+  }
+
+  /* PARTICLE TRAIL */
+  #particle-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  /* --- MASCOT (SVG combo with animations) --- */
+  #mascot {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    bottom: 20px;
+    left: 20px;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  #mascot:hover {
+    transform: scale(1.08) rotate(-3deg);
+  }
+
+  /* DRAGGABLE TOY BLOCKS (Combo: SVG + animated shapes) */
+  .toy-block {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    cursor: grab;
+    transition: transform 0.15s;
+  }
+  .toy-block:active {
+    cursor: grabbing;
+    transform: scale(1.05);
+  }
+
+  /* BUTTONS / ICONS (SVG combo) */
+  .fun-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.4);
+    padding: 10px 20px;
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .fun-btn:hover {
+    background: rgba(255,255,255,0.25);
+    transform: scale(1.05);
+  }
+</style>
+</head>
+<body>
+
+<div id="galaxy-bg"></div>
+<canvas id="particle-canvas"></canvas>
+<div id="floating-shapes"></div>
+
+<!-- Mascot: SVG Combo Character -->
+<div id="mascot">
+<svg viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="70" fill="#ff66cc" />
+  <circle cx="75" cy="80" r="15" fill="white" />
+  <circle cx="125" cy="80" r="15" fill="white" />
+  <circle cx="75" cy="80" r="7" fill="black" />
+  <circle cx="125" cy="80" r="7" fill="black" />
+  <path d="M70 120 Q100 150 130 120" stroke="black" stroke-width="6" fill="none" />
+</svg>
+</div>
+
+<!-- Toy Blocks Combo -->
+<div class="toy-block" style="top:200px; left:200px;">
+  <svg viewBox="0 0 100 100">
+    <rect width="100" height="100" rx="12" fill="#66ccff" />
+    <circle cx="50" cy="50" r="20" fill="white" />
+  </svg>
+</div>
+
+<div class="toy-block" style="top:350px; left:80px;">
+  <svg viewBox="0 0 100 100">
+    <rect width="100" height="100" rx="12" fill="#ffcc66" />
+    <polygon points="50,20 70,80 30,80" fill="white" />
+  </svg>
+</div>
+
+<!-- Fun Button (SVG combo icon) -->
+<div class="fun-btn" id="rainbowBtn">
+  <svg width="24" height="24" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10" stroke="white" stroke-width="3" fill="none" />
+  </svg>
+  Rainbow Mode
+</div>
+
+<script>
+/* --- PARTICLE TRAIL --- */
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+let particles = [];
+
+class Particle {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.size = Math.random() * 6 + 2;
+    this.speedX = Math.random() * 2 - 1;
+    this.speedY = Math.random() * 2 - 1;
+    this.alpha = 1;
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    this.alpha -= 0.02;
+  }
+  draw() {
+    ctx.globalAlpha = this.alpha;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = 'hsl(' + (Date.now() % 360) + ', 100%, 70%)';
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => p.alpha > 0);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+addEventListener('mousemove', e => {
+  for (let i = 0; i < 4; i++) particles.push(new Particle(e.clientX, e.clientY));
+});
+
+/* --- DRAGGABLE BLOCKS --- */
+let active = null;
+let offsetX = 0;
+let offsetY = 0;
+
+document.querySelectorAll('.toy-block').forEach(block => {
+  block.addEventListener('mousedown', e => {
+    active = block;
+    offsetX = e.clientX - block.offsetLeft;
+    offsetY = e.clientY - block.offsetTop;
+  });
+});
+
+document.addEventListener('mousemove', e => {
+  if (active) {
+    active.style.left = (e.clientX - offsetX) + 'px';
+    active.style.top = (e.clientY - offsetY) + 'px';
+  }
+});
+
+document.addEventListener('mouseup', () => active = null);
+
+/* --- RAINBOW MODE --- */
+let rainbowActive = false;
+const btn = document.getElementById('rainbowBtn');
+btn.onclick = () => {
+  rainbowActive = !rainbowActive;
+  if (rainbowActive) {
+    document.body.style.animation = 'rainbow 6s linear infinite';
+  } else {
+    document.body.style.animation = 'none';
+  }
+};
+
+</script>
+
+<style>
+@keyframes rainbow {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+</style>
+
+</body>
+</html>

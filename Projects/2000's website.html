@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>DevGuide β – Modern Web Development 2008 Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Vegur:400,700,400italic" />
+  
+  <style>
+    /* ===== 2000s Web 2.0 CLASSICS ===== */
+    body {
+      margin:0; padding:0;
+      background: #f0f3f9 url('https://i.imgur.com/2cO6Z.jpg') repeat-x top; /* subtle gradient sky */
+      font: 13px/1.6 "Lucida Grande", "Lucida Sans Unicode", Verdana, sans-serif;
+      color: #333;
+    }
+    
+    #wrapper {
+      width: 960px;
+      margin: 0 auto;
+      background: #fff;
+      border-left: 1px solid #ccc;
+      border-right: 1px solid #ccc;
+      box-shadow: 0 0 30px rgba(0,0,0,0.15);
+      min-height: 100vh;
+    }
+    
+    /* Shiny Header */
+    header {
+      background: linear-gradient(#7db9e8, #1e5799);
+      padding: 30px 40px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    header h1 {
+      font: bold 48px/1 "Vegur", Helvetica, sans-serif;
+      margin:0;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      letter-spacing: -1px;
+    }
+    header .beta {
+      position: absolute;
+      top: 20px; right: 40px;
+      background: #ffcc00;
+      color: #b35c00;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      transform: rotate(-10deg);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+    
+    /* Glossy Nav */
+    nav {
+      background: linear-gradient(#444, #222);
+      padding: 10px 0;
+      box-shadow: inset 0 1px 0 #666, 0 3px 10px rgba(0,0,0,0.3);
+    }
+    nav ul {
+      list-style: none;
+      margin:0; padding:0;
+      text-align: center;
+    }
+    nav li {
+      display: inline-block;
+    }
+    nav a {
+      color: #eee;
+      text-decoration: none;
+      padding: 12px 20px;
+      display: block;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    nav a:hover {
+      background: rgba(255,255,255,0.2);
+      box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+    
+    /* Main Layout */
+    #container {
+      display: flex;
+    }
+    aside {
+      width: 240px;
+      background: #f5f5f5;
+      border-right: 1px solid #ddd;
+      padding: 30px 20px;
+      min-height: calc(100vh - 220px);
+    }
+    aside h3 {
+      color: #1e5799;
+      border-bottom: 2px solid #7db9e8;
+      padding-bottom: 8px;
+    }
+    aside a {
+      display: block;
+      padding: 8px 12px;
+      margin: 4px 0;
+      background: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #333;
+      transition: all 0.2s;
+    }
+    aside a:hover {
+      background: #7db9e8;
+      color: white;
+    }
+    
+    main {
+      flex: 1;
+      padding: 40px;
+    }
+    
+    .section {
+      background: #fff;
+      padding: 30px;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      border: 1px solid #ddd;
+    }
+    .section h2 {
+      font: bold 28px/1.2 "Vegur", Helvetica;
+      color: #1e5799;
+      margin-top: 0;
+      border-bottom: 3px solid #a0d0ff;
+      padding-bottom: 10px;
+    }
+    
+    /* Glossy Buttons */
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: linear-gradient(#87e0fd, #05abe0);
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+      transition: all 0.2s;
+    }
+    .btn:hover {
+      background: linear-gradient(#05abe0, #0589b6);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    
+    pre {
+      background: #2b2b2b;
+      color: #f8f8f2;
+      padding: 20px;
+      border-radius: 10px;
+      overflow-x: auto;
+      font: 13px Monaco, Consolas, monospace;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    }
+    
+    footer {
+      text-align: center;
+      padding: 40px;
+      background: #222;
+      color: #999;
+      font-size: 12px;
+    }
+    footer a { color: #7db9e8; }
+    
+    /* Reflection effect on header */
+    header::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 50%;
+      background: linear-gradient(transparent, rgba(255,255,255,0.3));
+      pointer-events: none;
+    }
+    
+    /* Loading spinner (just for the vibe) */
+    .spinner {
+      display: inline-block;
+      width: 20px; height: 20px;
+      border: 3px solid #ccc;
+      border-top-color: #1e5799;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+
+<body>
+  <div id="wrapper">
+    <header>
+      <h1>DevGuide <span class="beta">βeta</span></h1>
+      <p style="margin:10px 0 0; opacity:0.9;">The Future of Web Development – 2008 Style</p>
+    </header>
+    
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Docs</a></li>
+        <li><a href="#">API</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Login</a></li>
+      </ul>
+    </nav>
+    
+    <div id="container">
+      <aside>
+        <h3>Documentation</h3>
+        <a href="#intro">Introduction to HTML</a>
+        <a href="#css">What is CSS</a>
+        <a href="#tags">Basic HTML Tags</a>
+        <a href="#selectors">CSS Selectors</a>
+        <a href="#box">Box Model</a>
+        <a href="#grid">CSS Grid (coming soon)</a>
+        <a href="#colors">CSS Colors</a>
+        
+        <p style="margin-top:40px;">
+          <a href="#" class="btn">Download PDF</a>
+        </p>
+      </aside>
+      
+      <main>
+        <div class="section" id="intro">
+          <h2>Introduction to HTML</h2>
+          <p>We’re building the <strong>Web 2.0</strong> way – with clean XHTML, progressive enhancement, and a lot of Ajax.</p>
+          <p>Rounded corners, gradients, and big glossy buttons are now mandatory.</p>
+          
+          <pre>&lt;div class="rounded glossy"&gt;
+  &lt;h2&gt;Welcome to the future!&lt;/h2&gt;
+  &lt;p&gt;Loading awesome content... <span class="spinner"></span>&lt;/p&gt;
+&lt;/div&gt;</pre>
+        </div>
+        
+        <div class="section" id="css">
+          <h2>What is CSS</h2>
+          <p>CSS is used to create beautiful gradients, drop shadows, and semi-transparent overlays. We love <code>border-radius</code> and <code>box-shadow</code>!</p>
+        </div>
+        
+        <div class="section">
+          <h2>Box Model (Now with border-radius!)</h2>
+          <p>Everything gets <code>border-radius: 10px;</code> and a subtle <code>box-shadow</code>. It’s not optional.</p>
+        </div>
+        
+        <div class="section">
+          <h2>CSS Grid (Standard)</h2>
+          <p>We’re still using floats and <code>clearfix</code> hacks. Grid? That won’t exist until 2017. Be patient</p>
+        </div>
+        
+        <div class="section">
+          <h2>Join the Beta!</h2>
+          <p>Sign up today and get early access to our revolutionary framework.</p>
+          <p><a href="#" class="btn">Get Started – It’s Free!</a></p>
+        </div>
+      </main>
+    </div>
+    
+    <footer>
+      © 2008 DevGuide, Inc. • Built with Ruby on Rails • 
+      <a href="#">Terms</a> • <a href="#">Privacy</a> • 
+      <a href="#">Status</a> • Made with ♥ in San Francisco
+    </footer>
+  </div>
+</body>
+</html>>
