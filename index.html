@@ -10,8 +10,8 @@
 <script>
 function addRow(name, url, isdir,
     size, size_string, date_modified, date_modified_string) {
-  if (name == "." || name == "..")
-    return;
+  if (name == "." || name == ".." || name.toLowerCase() === "index.html")
+  return;
 
   var root = document.location.pathname;
   if (root.substr(-1) !== "/")
@@ -233,9 +233,7 @@ window.addEventListener('DOMContentLoaded', onLoad);
   onHasParentDirectory();
 
   // Add files/folders (no size or date)
-  addRow("Portfolio - Copy", "Portfolio%20-%20Copy", 1);
   addRow("Projects", "Projects", 1);
   addRow("About Me.txt", "About%20Me.txt", 0);
-  addRow("index.html", "index.html", 0);
   addRow("profile.png", "profile.png", 0);
 </script>
